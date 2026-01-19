@@ -159,3 +159,17 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTH_USER_MODEL = 'accounts.User'
+
+
+# TEMP: create superuser on deploy (REMOVE AFTER)
+import os
+from django.contrib.auth import get_user_model
+
+if os.environ.get("CREATE_SUPERUSER") == "1":
+    User = get_user_model()
+    if not User.objects.filter(email="admin@admin.com").exists():
+        User.objects.create_superuser(
+            email="admin@admin.com",
+            username="admin",
+            password="admin12345"
+        )
